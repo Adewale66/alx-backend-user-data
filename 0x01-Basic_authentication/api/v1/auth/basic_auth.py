@@ -11,7 +11,7 @@ import base64
 class BasicAuth(Auth):
     """BasicAuth class
     """
-    
+
     def extract_base64_authorization_header(self, authorization_header: str) -> str:
         """extract base64 authorization header
         """
@@ -62,4 +62,3 @@ class BasicAuth(Auth):
         user_credentials = self.extract_user_credentials(decoded_header)
         user = self.user_object_from_credentials(user_credentials[0], user_credentials[1])
         return user
-        
