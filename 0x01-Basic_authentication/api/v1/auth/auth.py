@@ -1,38 +1,48 @@
 #!/usr/bin/env python3
-"""Authentication module for the API.
 """
-import re
-from typing import List, TypeVar
+Auth module
+"""
+
 from flask import request
+from typing import List, TypeVar
 
 
 class Auth:
-    """Authentication class.
+    """Auth class module
     """
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """Checks if a path requires authentication.
+        """require auth method
+
+        Args:
+            path (str): _description_
+            excluded_paths (List[str]): _description_
+
+        Returns:
+            bool: _description_
         """
-        if path is not None and excluded_paths is not None:
-            for exclusion_path in map(lambda x: x.strip(), excluded_paths):
-                pattern = ''
-                if exclusion_path[-1] == '*':
-                    pattern = '{}.*'.format(exclusion_path[0:-1])
-                elif exclusion_path[-1] == '/':
-                    pattern = '{}/*'.format(exclusion_path[0:-1])
-                else:
-                    pattern = '{}/*'.format(exclusion_path)
-                if re.match(pattern, path):
-                    return False
+        if path is None or excluded_paths is None or excluded_paths == []:
+            return True
+        if path[-1] != '/':
+            path += '/'
+        if path in excluded_paths:
+            return False
         return True
 
     def authorization_header(self, request=None) -> str:
-        """Gets the authorization header field from the request.
+        """authorization header method
+
+        Args:
+            request (_type_, optional): _description_. Defaults to None.
+
+        Returns:
+            str: _description_
         """
-        if request is not None:
-            return request.headers.get('Authorization', None)
-        return None
+        if request is None:
+            return None
+        if "Authorization" not in request.headers:
+            return None
+        return request.headers.get("Authorization")
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """Gets the current user from the request.
-        """
         return None
